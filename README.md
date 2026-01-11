@@ -64,7 +64,6 @@ Available operations:
 - express: Web framework
 - mongoose: MongoDB ODM
 - dotenv: Environment variable loader
-- ejs: Template engine
 - nodemon: Development tool
 
 ## License
