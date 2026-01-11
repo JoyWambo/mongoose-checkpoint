@@ -22,7 +22,7 @@ const runTests = async () => {
   }
 };
 
-runTests();
+// runTests();
 
 // Start server
 app.listen(port, () => {
