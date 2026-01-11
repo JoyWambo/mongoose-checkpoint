@@ -1,104 +1,108 @@
-// controllers/personController.js
 const Person = require("../models/Person");
 
 // Create and Save a Record of a Model
-const createAndSavePerson = (done) => {
-  const person = new Person({
-    name: "John Doe",
-    age: 30,
-    favoriteFoods: ["Pizza", "Burger"],
-  });
+const createAndSavePerson = async () => {
+  try {
+    const person = new Person({
+      name: "John Doe",
+      age: 30,
+      favoriteFoods: ["Pizza", "Burger"],
+    });
 
-  person.save((err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+    return await person.save();
+  } catch (err) {
+    throw err;
+  }
 };
 
 // Create Many Records with model.create()
-const createManyPeople = (arrayOfPeople, done) => {
-  Person.create(arrayOfPeople, (err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+const createManyPeople = async (arrayOfPeople) => {
+  try {
+    return await Person.create(arrayOfPeople);
+  } catch (err) {
+    throw err;
+  }
 };
 
 // Use model.find() to Search Your Database
-const findPeopleByName = (personName, done) => {
-  Person.find({ name: personName }, (err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+const findPeopleByName = async (personName) => {
+  try {
+    return await Person.find({ name: personName });
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Use model.findOne() to Return a Single Matching Document from Your Database
-const findOneByFood = (food, done) => {
-  Person.findOne({ favoriteFoods: food }, (err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+// Use model.findOne() to Return a Single Matching Document
+const findOneByFood = async (food) => {
+  try {
+    return await Person.findOne({ favoriteFoods: food });
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Use model.findById() to Search Your Database By _id
-const findPersonById = (personId, done) => {
-  Person.findById(personId, (err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+// Use model.findById()
+const findPersonById = async (personId) => {
+  try {
+    return await Person.findById(personId);
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Perform Classic Updates by Running Find, Edit, then Save
-const findEditThenSave = (personId, done) => {
-  Person.findById(personId, (err, person) => {
-    if (err) return done(err);
+// Perform Classic Updates by Find → Edit → Save
+const findEditThenSave = async (personId) => {
+  try {
+    const person = await Person.findById(personId);
     person.favoriteFoods.push("hamburger");
-    person.markModified("favoriteFoods");
-    person.save((err, updatedPerson) => {
-      if (err) return done(err);
-      done(null, updatedPerson);
-    });
-  });
+    return await person.save();
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Perform New Updates on a Document Using model.findOneAndUpdate()
-const findAndUpdate = (personName, done) => {
-  Person.findOneAndUpdate(
-    { name: personName },
-    { age: 20 },
-    { new: true },
-    (err, data) => {
-      if (err) return done(err);
-      done(null, data);
-    }
-  );
+// Perform New Updates on a Document Using findOneAndUpdate()
+const findAndUpdate = async (personName) => {
+  try {
+    return await Person.findOneAndUpdate(
+      { name: personName },
+      { age: 20 },
+      { new: true }
+    );
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Delete One Document Using model.findByIdAndRemove
-const removeById = (personId, done) => {
-  Person.findByIdAndRemove(personId, (err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+// Delete One Document Using findByIdAndDelete
+const removeById = async (personId) => {
+  try {
+    return await Person.findByIdAndDelete(personId);
+  } catch (err) {
+    throw err;
+  }
 };
 
-// MongoDB and Mongoose - Delete Many Documents with model.remove()
-const removeManyPeople = (done) => {
-  Person.remove({ name: "Mary" }, (err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+// Delete Many Documents
+const removeManyPeople = async () => {
+  try {
+    return await Person.deleteMany({ name: "Mary" });
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Chain Search Query Helpers to Narrow Search Results
-const queryChain = (done) => {
-  Person.find({ favoriteFoods: "burritos" })
-    .sort({ name: 1 })
-    .limit(2)
-    .select({ age: 0 })
-    .exec((err, data) => {
-      if (err) return done(err);
-      done(null, data);
-    });
+// Chain Search Query Helpers
+const queryChain = async () => {
+  try {
+    return await Person.find({ favoriteFoods: "burritos" })
+      .sort({ name: 1 })
+      .limit(2)
+      .select("-age");
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = {

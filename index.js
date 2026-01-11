@@ -12,12 +12,17 @@ const port = 3000;
 // Connect to MongoDB
 connectDB();
 
-// You can test functions here (uncomment to run)
-// Example:
-// personController.createAndSavePerson((err, data) => {
-//   if (err) console.error(err);
-//   else console.log('Saved person:', data);
-// });
+// Test functions (run once when server starts)
+const runTests = async () => {
+  try {
+    const savedPerson = await personController.createAndSavePerson();
+    console.log("Saved person:", savedPerson);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+runTests();
 
 // Start server
 app.listen(port, () => {
